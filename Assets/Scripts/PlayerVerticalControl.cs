@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerVerticalControl : MonoBehaviour
 {
-
+    [SerializeField] private float forwardSpeed = 3f;
     [SerializeField] private float verticalSpeed = 5f;
     [SerializeField] private float minY = -4f;
     [SerializeField] private float maxY = 4f;
@@ -15,16 +15,17 @@ public class PlayerVerticalControl : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         verticalInput = Input.GetAxisRaw("Vertical");
     }
 
     private void FixedUpdate()
     {
-        Vector2 nextPosition = rb.position + Vector2.up * verticalInput * verticalSpeed * Time.fixedDeltaTime;
+        Vector2 move = new Vector2(forwardSpeed, verticalInput * verticalSpeed) * Time.fixedDeltaTime;
+        Vector2 nextPosition = rb.position + move;
         nextPosition.y = Mathf.Clamp(nextPosition.y, minY, maxY);
+
         rb.MovePosition(nextPosition);
     }
 }
